@@ -1,0 +1,668 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Venmo Payment Card</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: transparent;
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0;
+    }
+
+    /* ── SUPER SMOOTH OPENING EFFECT ── */
+    @keyframes cardEntrance {
+      0% {
+        opacity: 0;
+        transform: translateY(30px) scale(0.96);
+      }
+      100% {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+      }
+    }
+
+    .payment-card {
+      max-width: 480px;
+      width: 100%;
+      background: #ffffff;
+      border-radius: 2.5rem;
+      padding: 2rem 2rem 2.2rem;
+      box-shadow: 0 20px 60px rgba(0, 20, 50, 0.12), 0 8px 24px rgba(0, 0, 0, 0.04);
+      border: 1px solid rgba(0, 0, 0, 0.04);
+      transition: transform 0.2s ease;
+
+      /* opening effect applied here */
+      opacity: 0; /* start invisible */
+      animation: cardEntrance 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+      will-change: transform, opacity;
+    }
+
+    .payment-card:hover {
+      transform: translateY(-2px);
+    }
+
+    .card-header {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      margin-bottom: 1.75rem;
+    }
+
+    .card-header i {
+      font-size: 2rem;
+      color: #008cff;
+      background: rgba(0, 140, 255, 0.10);
+      padding: 0.5rem;
+      border-radius: 1rem;
+    }
+
+    .card-header h1 {
+      font-size: 1.5rem;
+      font-weight: 600;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #0b1e33, #1a3a5c);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .card-header .badge {
+      margin-left: auto;
+      background: #008cff;
+      color: #fff;
+      font-size: 0.6rem;
+      font-weight: 600;
+      padding: 0.25rem 0.75rem;
+      border-radius: 50px;
+      letter-spacing: 0.3px;
+      text-transform: uppercase;
+    }
+
+    .input-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .input-group label {
+      display: block;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #1e2f44;
+      letter-spacing: 0.3px;
+      margin-bottom: 0.35rem;
+    }
+
+    .input-group .input-wrap {
+      display: flex;
+      align-items: center;
+      background: #f2f5f9;
+      border-radius: 1.2rem;
+      padding: 0 1rem;
+      border: 1.5px solid transparent;
+      transition: border 0.2s, background 0.2s;
+    }
+
+    .input-group .input-wrap:focus-within {
+      border-color: #008cff;
+      background: #ffffff;
+      box-shadow: 0 0 0 4px rgba(0, 140, 255, 0.08);
+    }
+
+    .input-group .input-wrap i {
+      color: #7b8ba3;
+      font-size: 0.9rem;
+      margin-right: 0.6rem;
+      width: 1.2rem;
+      text-align: center;
+    }
+
+    .input-group input {
+      width: 100%;
+      padding: 0.9rem 0;
+      border: none;
+      background: transparent;
+      font-size: 1rem;
+      font-weight: 500;
+      color: #0b1e33;
+      outline: none;
+      font-family: inherit;
+    }
+
+    .input-group input::placeholder {
+      color: #aebacb;
+      font-weight: 400;
+    }
+
+    .input-group input[type="number"] {
+      -moz-appearance: textfield;
+    }
+    .input-group input[type="number"]::-webkit-outer-spin-button,
+    .input-group input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+    }
+
+    /* donation warning */
+    .warning-msg {
+      font-size: 0.75rem;
+      color: #e67e22;
+      margin-top: 0.4rem;
+      padding-left: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      opacity: 0;
+      transition: opacity 0.25s ease;
+      font-weight: 500;
+    }
+    .warning-msg.show {
+      opacity: 1;
+    }
+    .warning-msg i {
+      font-size: 0.7rem;
+    }
+
+    .qr-section {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      margin: 1.75rem 0 1.5rem;
+      padding: 0.75rem 1rem;
+      background: #f8faff;
+      border-radius: 1.8rem;
+      border: 1px solid rgba(0, 140, 255, 0.08);
+    }
+
+    .qr-box {
+      flex-shrink: 0;
+      width: 110px;
+      height: 110px;
+      background: #ffffff;
+      border-radius: 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+      padding: 6px;
+      overflow: hidden;
+    }
+
+    .qr-box img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+
+    .qr-actions {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .qr-actions p {
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: #3d5670;
+      letter-spacing: 0.2px;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .qr-actions p i {
+      color: #008cff;
+      font-size: 0.7rem;
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn-sm {
+      font-size: 0.7rem;
+      font-weight: 600;
+      padding: 0.45rem 0.9rem;
+      border-radius: 50px;
+      border: none;
+      background: #eef3f9;
+      color: #1e2f44;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: 0.15s;
+      font-family: inherit;
+      border: 1px solid transparent;
+    }
+
+    .btn-sm:hover {
+      background: #dce6f0;
+    }
+
+    .btn-sm.primary-sm {
+      background: #008cff;
+      color: #fff;
+    }
+    .btn-sm.primary-sm:hover {
+      background: #0073d9;
+      transform: scale(0.97);
+    }
+
+    .payment-box {
+      margin-top: 0.5rem;
+      width: 100%;
+    }
+
+    .venmo-btn {
+      width: 100%;
+      padding: 1.1rem 1.5rem;
+      border: none;
+      border-radius: 2rem;
+      background: #008CFF;
+      color: #ffffff;
+      font-size: 1.2rem;
+      font-weight: 600;
+      font-family: inherit;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.75rem;
+      cursor: pointer;
+      transition: 0.2s ease;
+      box-shadow: 0 8px 24px rgba(0, 140, 255, 0.30);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      letter-spacing: 0.2px;
+    }
+
+    .venmo-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 32px rgba(0, 140, 255, 0.35);
+      background: #0073d9;
+    }
+
+    .venmo-btn:active {
+      transform: scale(0.97);
+      box-shadow: 0 4px 12px rgba(0, 140, 255, 0.25);
+    }
+
+    .venmo-icon {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+    }
+
+    .venmo-icon svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+    }
+
+    .arrow {
+      font-size: 1.3rem;
+      line-height: 1;
+      transition: transform 0.2s ease;
+    }
+
+    .venmo-btn:hover .arrow {
+      transform: translateX(4px);
+    }
+
+    .footnote {
+      margin-top: 1.2rem;
+      text-align: center;
+      font-size: 0.7rem;
+      color: #6d829e;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .footnote a {
+      color: #008cff;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    .footnote a:hover {
+      text-decoration: underline;
+    }
+
+    .sdk-toggle {
+      margin-top: 1.8rem;
+      text-align: center;
+    }
+
+    .sdk-toggle summary {
+      font-size: 0.75rem;
+      color: #6d829e;
+      cursor: pointer;
+      padding: 0.4rem 1rem;
+      border-radius: 50px;
+      background: rgba(0, 0, 0, 0.02);
+      display: inline-block;
+      border: 1px dashed #cdd9e8;
+      font-weight: 500;
+    }
+
+    .sdk-toggle summary:hover {
+      background: rgba(0, 140, 255, 0.04);
+      border-color: #008cff;
+    }
+
+    .sdk-box {
+      margin-top: 1.2rem;
+      background: #0b1e33;
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      text-align: left;
+      color: #d4e2f5;
+      font-size: 0.8rem;
+      border: 1px solid #1a3a5c;
+    }
+
+    .sdk-box code {
+      display: block;
+      background: #142c44;
+      padding: 1rem;
+      border-radius: 1rem;
+      margin: 0.8rem 0;
+      color: #b8d0f0;
+      font-size: 0.7rem;
+      overflow-x: auto;
+      white-space: pre-wrap;
+      word-break: break-word;
+      border-left: 3px solid #008cff;
+    }
+
+    .sdk-box .note {
+      color: #8aa6c9;
+      margin-top: 0.5rem;
+      font-size: 0.7rem;
+    }
+
+    @media (max-width: 480px) {
+      .payment-card {
+        padding: 1.5rem;
+        border-radius: 1.8rem;
+      }
+      .qr-section {
+        flex-direction: column;
+        align-items: center;
+        padding: 1rem;
+      }
+      .qr-box {
+        width: 140px;
+        height: 140px;
+      }
+      .qr-actions {
+        width: 100%;
+        align-items: center;
+      }
+      .action-buttons {
+        justify-content: center;
+      }
+      .card-header h1 {
+        font-size: 1.2rem;
+      }
+      .venmo-btn {
+        font-size: 1rem;
+        padding: 0.9rem 1.2rem;
+      }
+    }
+
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: #0b1e33;
+      color: #fff;
+      padding: 0.7rem 1.8rem;
+      border-radius: 50px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
+      opacity: 0;
+      transition: 0.3s ease;
+      pointer-events: none;
+      z-index: 999;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+  </style>
+</head>
+<body>
+
+  <div id="toast" class="toast">✅ Link copied to clipboard!</div>
+
+  <div class="payment-card">
+
+    <div class="card-header">
+      <i class="fab fa-venmo"></i>
+      <h1>Venmo Pay</h1>
+      <span class="badge"><i class="fas fa-lock" style="margin-right:4px;"></i> secure</span>
+    </div>
+
+    <!-- Recipient -->
+    <div class="input-group">
+      <label><i class="fas fa-user" style="margin-right:6px;"></i> Recipient (Venmo @username)</label>
+      <div class="input-wrap">
+        <i class="fas fa-at"></i>
+        <input type="text" id="recipient" value="Viraldancando" readonly style="color:#6d829e; cursor:default;" />
+      </div>
+    </div>
+
+    <!-- Amount with warning -->
+    <div class="input-group">
+      <label><i class="fas fa-dollar-sign" style="margin-right:6px;"></i> Amount (USD)</label>
+      <div class="input-wrap">
+        <i class="fas fa-dollar-sign"></i>
+        <input type="number" id="amount" value="6.99" step="0.01" min="0.01" />
+      </div>
+      <div id="donationWarning" class="warning-msg">
+        <i class="fas fa-exclamation-circle"></i> Anything above $6.99 is considered a donation.
+      </div>
+    </div>
+
+    <!-- Note -->
+    <div class="input-group">
+      <label><i class="fas fa-pencil-alt" style="margin-right:6px;"></i> Note</label>
+      <div class="input-wrap">
+        <i class="fas fa-comment"></i>
+        <input type="text" id="note" value="Coffee ☕" />
+      </div>
+    </div>
+
+    <!-- QR + actions -->
+    <div class="qr-section">
+      <div class="qr-box">
+        <img
+          src="https://64.media.tumblr.com/322b55b5f3ca67d647f4c38c2d7f0ed7/1a88d1b2e6d03560-02/s640x960/a72cba24cb5c4a0dd99fd51a8faab1284d536b9d.pnj"
+          alt="Venmo QR Code"
+        />
+      </div>
+      <div class="qr-actions">
+        <p><i class="fas fa-qrcode"></i> Scan with Venmo app</p>
+        <div class="action-buttons">
+          <button class="btn-sm" id="copyLinkBtn"><i class="fas fa-copy"></i> Copy link</button>
+          <button class="btn-sm primary-sm" id="shareBtn"><i class="fas fa-share-alt"></i> Share</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Venmo button -->
+    <div class="payment-box">
+      <button class="venmo-btn" id="payBtn">
+        <span class="venmo-icon">
+          <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="16" cy="16" r="14" stroke="white" stroke-width="1.5" opacity="0.6"/>
+            <path d="M10 10L15 22L20 10H23L18 22L13 10H10Z" fill="white"/>
+          </svg>
+        </span>
+        Pay with Venmo
+        <span class="arrow">→</span>
+      </button>
+    </div>
+
+    <div class="footnote">
+      <span><i class="fas fa-external-link-alt"></i> Opens your Venmo profile</span>
+      <span>·</span>
+      <span><i class="fas fa-shield-alt"></i> No payment processed on this page</span>
+    </div>
+
+    <!-- Developer SDK -->
+    <details class="sdk-toggle">
+      <summary><i class="fas fa-code"></i> Developer: Official SDK button</summary>
+      <div class="sdk-box">
+        <strong style="color:#fff;">🔹 PayPal JS SDK (Venmo button)</strong>
+        <p style="margin:0.5rem 0 0.3rem;color:#b8d0f0;">Replace <code style="background:#0b1e33;padding:0.1rem 0.4rem;">YOUR_CLIENT_ID</code> with your PayPal client ID.</p>
+        <code>
+          &lt;script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&components=buttons,venmo-payments"&gt;&lt;/script&gt;
+          &lt;div id="venmo-button-container"&gt;&lt;/div&gt;
+          &lt;script&gt;
+            paypal.Buttons({
+              style: { shape: 'rect', color: 'blue' },
+              createOrder: function(data, actions) {
+                return actions.order.create({ purchase_units: [{ amount: { value: '10.00' } }] });
+              },
+              onApprove: function(data, actions) {
+                return actions.order.capture();
+              }
+            }).render('#venmo-button-container');
+          &lt;/script&gt;
+        </code>
+        <div class="note">
+          <i class="fas fa-info-circle"></i> The SDK will show the Venmo button to eligible US users.
+          <a href="https://developer.paypal.com/docs/checkout/venmo/" target="_blank" style="color:#66b3ff;display:inline-block;margin-top:0.3rem;">
+            Read full docs →
+          </a>
+        </div>
+      </div>
+    </details>
+  </div>
+
+  <script>
+    (function() {
+      'use strict';
+
+      const amountInput = document.getElementById('amount');
+      const payBtn = document.getElementById('payBtn');
+      const copyBtn = document.getElementById('copyLinkBtn');
+      const shareBtn = document.getElementById('shareBtn');
+      const toast = document.getElementById('toast');
+      const warningEl = document.getElementById('donationWarning');
+
+      // ---- Amount warning ----
+      function checkAmount() {
+        const val = parseFloat(amountInput.value);
+        if (!isNaN(val) && val > 6.99) {
+          warningEl.classList.add('show');
+        } else {
+          warningEl.classList.remove('show');
+        }
+      }
+
+      amountInput.addEventListener('input', checkAmount);
+      checkAmount();
+
+      // ---- Venmo profile URL ----
+      const PROFILE_URL = 'https://account.venmo.com/u/Viraldancando';
+
+      function openProfile() {
+        window.open(PROFILE_URL, '_blank');
+      }
+
+      // ---- Copy / Share ----
+      function copyLink() {
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(PROFILE_URL).then(() => {
+            showToast('✅ Profile link copied!');
+          }).catch(() => {
+            fallbackCopy(PROFILE_URL);
+          });
+        } else {
+          fallbackCopy(PROFILE_URL);
+        }
+      }
+
+      function fallbackCopy(text) {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.cssText = 'position:fixed;opacity:0;left:-9999px;';
+        document.body.appendChild(ta);
+        ta.select();
+        try {
+          document.execCommand('copy');
+          showToast('✅ Profile link copied!');
+        } catch (e) {
+          showToast('❌ Could not copy.');
+        }
+        document.body.removeChild(ta);
+      }
+
+      function shareLink() {
+        if (navigator.share) {
+          navigator.share({
+            title: 'Venmo Payment',
+            text: `Pay via Venmo: ${PROFILE_URL}`,
+            url: PROFILE_URL,
+          }).catch(() => {});
+        } else {
+          copyLink();
+        }
+      }
+
+      let toastTimeout;
+
+      function showToast(msg) {
+        toast.textContent = msg;
+        toast.classList.add('show');
+        clearTimeout(toastTimeout);
+        toastTimeout = setTimeout(() => toast.classList.remove('show'), 3000);
+      }
+
+      // ---- Events ----
+      payBtn.addEventListener('click', openProfile);
+      copyBtn.addEventListener('click', copyLink);
+      shareBtn.addEventListener('click', shareLink);
+
+      document.querySelectorAll('input').forEach(inp => {
+        inp.addEventListener('keydown', (e) => {
+          if (e.key === 'Enter') {
+            e.preventDefault();
+            payBtn.click();
+          }
+        });
+      });
+
+      console.log('✅ Venmo card ready with smooth opening effect.');
+    })();
+  </script>
+
+</body>
+</html>
