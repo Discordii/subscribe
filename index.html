@@ -2,13 +2,16 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-  <title>Venmo Payment Card</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Potato Universe · Unlock the Vault</title>
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz@14..32&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,600;14..32,700;14..32,800;14..32,900&display=swap" rel="stylesheet" />
+  <!-- Font Awesome -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
   <style>
+    /* ---------- RESET & GLOBAL ---------- */
     * {
       margin: 0;
       padding: 0;
@@ -16,653 +19,698 @@
     }
 
     body {
-      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-      background: transparent;
-      min-height: 100vh;
+      font-family: 'Inter', sans-serif;
+      background: #0c0b0e;
+      color: #f0f1f3;
+      line-height: 1.5;
+      overflow-x: hidden;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    /* ---------- GLOW & ANIMATIONS ---------- */
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
+      100% { transform: translateY(0px); }
+    }
+
+    @keyframes pulseGlow {
+      0% { box-shadow: 0 0 20px rgba(217, 155, 60, 0.3); }
+      50% { box-shadow: 0 0 40px rgba(217, 155, 60, 0.6); }
+      100% { box-shadow: 0 0 20px rgba(217, 155, 60, 0.3); }
+    }
+
+    @keyframes slideUp {
+      from { opacity: 0; transform: translateY(40px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .animate-on-scroll {
+      opacity: 0;
+      animation: slideUp 0.8s ease forwards;
+    }
+
+    /* ---------- NAV ---------- */
+    nav {
+      padding: 20px 0;
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
-      padding: 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      flex-wrap: wrap;
+      gap: 16px;
     }
 
-    /* ── SUPER SMOOTH OPENING EFFECT ── */
-    @keyframes cardEntrance {
-      0% {
-        opacity: 0;
-        transform: translateY(30px) scale(0.96);
-      }
-      100% {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-      }
-    }
-
-    .payment-card {
-      max-width: 480px;
-      width: 100%;
-      background: #ffffff;
-      border-radius: 2.5rem;
-      padding: 2rem 2rem 2.2rem;
-      box-shadow: 0 20px 60px rgba(0, 20, 50, 0.12), 0 8px 24px rgba(0, 0, 0, 0.04);
-      border: 1px solid rgba(0, 0, 0, 0.04);
-      transition: transform 0.2s ease;
-
-      /* opening effect applied here */
-      opacity: 0; /* start invisible */
-      animation: cardEntrance 0.8s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-      will-change: transform, opacity;
-    }
-
-    .payment-card:hover {
-      transform: translateY(-2px);
-    }
-
-    .card-header {
-      display: flex;
-      align-items: center;
-      gap: 0.75rem;
-      margin-bottom: 1.75rem;
-    }
-
-    .card-header i {
-      font-size: 2rem;
-      color: #008cff;
-      background: rgba(0, 140, 255, 0.10);
-      padding: 0.5rem;
-      border-radius: 1rem;
-    }
-
-    .card-header h1 {
-      font-size: 1.5rem;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      background: linear-gradient(135deg, #0b1e33, #1a3a5c);
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 900;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #f5b042, #d99b3c);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       background-clip: text;
     }
 
-    .card-header .badge {
-      margin-left: auto;
-      background: #008cff;
-      color: #fff;
-      font-size: 0.6rem;
-      font-weight: 600;
-      padding: 0.25rem 0.75rem;
-      border-radius: 50px;
-      letter-spacing: 0.3px;
-      text-transform: uppercase;
+    .logo i {
+      -webkit-text-fill-color: initial;
+      color: #f5b042;
+      margin-right: 6px;
     }
 
-    .input-group {
-      margin-bottom: 1.25rem;
-    }
-
-    .input-group label {
-      display: block;
-      font-size: 0.8rem;
-      font-weight: 600;
-      color: #1e2f44;
-      letter-spacing: 0.3px;
-      margin-bottom: 0.35rem;
-    }
-
-    .input-group .input-wrap {
+    .nav-links {
       display: flex;
-      align-items: center;
-      background: #f2f5f9;
-      border-radius: 1.2rem;
-      padding: 0 1rem;
-      border: 1.5px solid transparent;
-      transition: border 0.2s, background 0.2s;
+      gap: 28px;
+      font-weight: 600;
+      font-size: 0.95rem;
     }
 
-    .input-group .input-wrap:focus-within {
-      border-color: #008cff;
-      background: #ffffff;
-      box-shadow: 0 0 0 4px rgba(0, 140, 255, 0.08);
+    .nav-links a {
+      color: #a8adb8;
+      transition: color 0.2s;
     }
 
-    .input-group .input-wrap i {
-      color: #7b8ba3;
-      font-size: 0.9rem;
-      margin-right: 0.6rem;
-      width: 1.2rem;
+    .nav-links a:hover {
+      color: #f5b042;
+    }
+
+    .nav-cta {
+      background: #f5b042;
+      color: #0c0b0e !important;
+      padding: 8px 22px;
+      border-radius: 40px;
+      font-weight: 700;
+      transition: all 0.2s;
+    }
+
+    .nav-cta:hover {
+      background: #d99b3c;
+      transform: scale(1.05);
+    }
+
+    /* ---------- HERO ---------- */
+    .hero {
+      padding: 60px 0 80px;
       text-align: center;
+      position: relative;
     }
 
-    .input-group input {
-      width: 100%;
-      padding: 0.9rem 0;
-      border: none;
-      background: transparent;
-      font-size: 1rem;
-      font-weight: 500;
-      color: #0b1e33;
-      outline: none;
-      font-family: inherit;
+    .hero::after {
+      content: '';
+      position: absolute;
+      top: -30%;
+      left: -20%;
+      width: 140%;
+      height: 140%;
+      background: radial-gradient(circle at 30% 40%, rgba(217, 155, 60, 0.08), transparent 70%);
+      pointer-events: none;
+      z-index: 0;
     }
 
-    .input-group input::placeholder {
-      color: #aebacb;
-      font-weight: 400;
+    .hero * {
+      position: relative;
+      z-index: 1;
     }
 
-    .input-group input[type="number"] {
-      -moz-appearance: textfield;
-    }
-    .input-group input[type="number"]::-webkit-outer-spin-button,
-    .input-group input[type="number"]::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
+    .hero-badge {
+      display: inline-block;
+      background: rgba(217, 155, 60, 0.15);
+      border: 1px solid rgba(217, 155, 60, 0.25);
+      padding: 6px 20px;
+      border-radius: 40px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #f5b042;
+      letter-spacing: 0.5px;
+      margin-bottom: 20px;
+      backdrop-filter: blur(4px);
     }
 
-    /* donation warning */
-    .warning-msg {
-      font-size: 0.75rem;
-      color: #e67e22;
-      margin-top: 0.4rem;
-      padding-left: 1rem;
+    .hero h1 {
+      font-size: clamp(2.8rem, 8vw, 5.2rem);
+      font-weight: 900;
+      line-height: 1.1;
+      letter-spacing: -1px;
+      margin-bottom: 16px;
+    }
+
+    .hero h1 .highlight {
+      background: linear-gradient(135deg, #f5b042, #e8842a);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      color: #b5bac3;
+      max-width: 640px;
+      margin: 0 auto 32px;
+    }
+
+    .hero-actions {
       display: flex;
-      align-items: center;
-      gap: 0.4rem;
-      opacity: 0;
-      transition: opacity 0.25s ease;
-      font-weight: 500;
-    }
-    .warning-msg.show {
-      opacity: 1;
-    }
-    .warning-msg i {
-      font-size: 0.7rem;
-    }
-
-    .qr-section {
-      display: flex;
-      align-items: center;
-      gap: 1.5rem;
-      margin: 1.75rem 0 1.5rem;
-      padding: 0.75rem 1rem;
-      background: #f8faff;
-      border-radius: 1.8rem;
-      border: 1px solid rgba(0, 140, 255, 0.08);
-    }
-
-    .qr-box {
-      flex-shrink: 0;
-      width: 110px;
-      height: 110px;
-      background: #ffffff;
-      border-radius: 1.2rem;
-      display: flex;
-      align-items: center;
+      flex-wrap: wrap;
       justify-content: center;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
-      padding: 6px;
+      gap: 16px;
+    }
+
+    .btn-primary {
+      background: #f5b042;
+      color: #0c0b0e;
+      padding: 14px 38px;
+      border-radius: 60px;
+      font-weight: 700;
+      font-size: 1.1rem;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      animation: pulseGlow 2.5s infinite;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-3px) scale(1.02);
+      background: #e8a03a;
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      padding: 14px 38px;
+      border-radius: 60px;
+      font-weight: 600;
+      transition: all 0.2s;
+      backdrop-filter: blur(4px);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: #f5b042;
+    }
+
+    .floating-emojis {
+      font-size: 3rem;
+      animation: float 3s ease-in-out infinite;
+      display: inline-block;
+      margin-left: 12px;
+    }
+
+    /* ---------- MEDIA SHOWCASE (hero gallery) ---------- */
+    .media-showcase {
+      margin: 40px 0 20px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      border-radius: 24px;
       overflow: hidden;
     }
 
-    .qr-box img {
+    .media-showcase .media-item {
+      border-radius: 16px;
+      overflow: hidden;
+      background: #1a1b1f;
+      border: 1px solid #2a2c31;
+      transition: transform 0.3s, filter 0.3s;
+      cursor: pointer;
+    }
+
+    .media-showcase .media-item:hover {
+      transform: scale(1.02);
+      filter: brightness(1.1);
+      z-index: 2;
+    }
+
+    .media-showcase img,
+    .media-showcase video {
       width: 100%;
-      height: 100%;
-      object-fit: contain;
+      height: 180px;
+      object-fit: cover;
       display: block;
     }
 
-    .qr-actions {
-      flex: 1;
+    .media-showcase video {
+      background: #0a0a0c;
+    }
+
+    /* ---------- FEATURES / BENEFITS ---------- */
+    .features {
+      padding: 80px 0;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 30px;
+      margin-top: 40px;
+    }
+
+    .feature-card {
+      background: #141519;
+      padding: 30px 24px;
+      border-radius: 20px;
+      border: 1px solid #23252b;
+      transition: all 0.3s;
+      text-align: center;
+    }
+
+    .feature-card:hover {
+      border-color: #f5b042;
+      transform: translateY(-6px);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.4);
+    }
+
+    .feature-card i {
+      font-size: 2.6rem;
+      color: #f5b042;
+      margin-bottom: 16px;
+    }
+
+    .feature-card h3 {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+
+    .feature-card p {
+      color: #a8adb8;
+      font-size: 0.95rem;
+    }
+
+    /* ---------- SUBSCRIPTION TIERS ---------- */
+    .tiers {
+      padding: 80px 0;
+    }
+
+    .section-title {
+      font-size: 2.4rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      text-align: center;
+      margin-bottom: 12px;
+    }
+
+    .section-sub {
+      text-align: center;
+      color: #a8adb8;
+      max-width: 560px;
+      margin: 0 auto 48px;
+      font-size: 1.05rem;
+    }
+
+    .tier-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 30px;
+    }
+
+    .tier-card {
+      background: #141519;
+      border-radius: 24px;
+      border: 1px solid #23252b;
+      padding: 32px 24px;
+      transition: all 0.3s;
+      position: relative;
+      overflow: hidden;
       display: flex;
       flex-direction: column;
-      gap: 0.6rem;
     }
 
-    .qr-actions p {
-      font-size: 0.75rem;
-      font-weight: 500;
-      color: #3d5670;
-      letter-spacing: 0.2px;
-      display: flex;
-      align-items: center;
-      gap: 0.4rem;
+    .tier-card:hover {
+      border-color: #f5b042;
+      transform: translateY(-8px);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
     }
 
-    .qr-actions p i {
-      color: #008cff;
+    .tier-card .tier-badge {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: #f5b042;
+      color: #0c0b0e;
       font-size: 0.7rem;
+      font-weight: 700;
+      padding: 4px 14px;
+      border-radius: 40px;
+      letter-spacing: 0.3px;
     }
 
-    .action-buttons {
-      display: flex;
-      gap: 0.5rem;
-      flex-wrap: wrap;
+    .tier-card .tier-icon {
+      font-size: 2.8rem;
+      margin-bottom: 12px;
     }
 
-    .btn-sm {
-      font-size: 0.7rem;
-      font-weight: 600;
-      padding: 0.45rem 0.9rem;
-      border-radius: 50px;
-      border: none;
-      background: #eef3f9;
-      color: #1e2f44;
-      cursor: pointer;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      transition: 0.15s;
-      font-family: inherit;
-      border: 1px solid transparent;
+    .tier-card h3 {
+      font-size: 1.6rem;
+      font-weight: 700;
+      margin-bottom: 6px;
     }
 
-    .btn-sm:hover {
-      background: #dce6f0;
-    }
-
-    .btn-sm.primary-sm {
-      background: #008cff;
-      color: #fff;
-    }
-    .btn-sm.primary-sm:hover {
-      background: #0073d9;
-      transform: scale(0.97);
-    }
-
-    .payment-box {
-      margin-top: 0.5rem;
-      width: 100%;
-    }
-
-    .venmo-btn {
-      width: 100%;
-      padding: 1.1rem 1.5rem;
-      border: none;
-      border-radius: 2rem;
-      background: #008CFF;
-      color: #ffffff;
+    .tier-card .tier-price {
+      color: #f5b042;
+      font-weight: 800;
       font-size: 1.2rem;
+      margin-bottom: 16px;
+    }
+
+    .tier-card ul {
+      list-style: none;
+      margin: 16px 0 24px;
+      flex: 1;
+    }
+
+    .tier-card ul li {
+      padding: 6px 0;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      color: #c8cdd6;
+      font-size: 0.95rem;
+    }
+
+    .tier-card ul li i {
+      color: #f5b042;
+      width: 20px;
+      text-align: center;
+    }
+
+    .tier-card .btn-tier {
+      background: #23252b;
+      color: #f0f1f3;
+      padding: 12px;
+      border-radius: 40px;
       font-weight: 600;
-      font-family: inherit;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      gap: 0.75rem;
-      cursor: pointer;
-      transition: 0.2s ease;
-      box-shadow: 0 8px 24px rgba(0, 140, 255, 0.30);
-      border: 1px solid rgba(255, 255, 255, 0.15);
-      letter-spacing: 0.2px;
-    }
-
-    .venmo-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 12px 32px rgba(0, 140, 255, 0.35);
-      background: #0073d9;
-    }
-
-    .venmo-btn:active {
-      transform: scale(0.97);
-      box-shadow: 0 4px 12px rgba(0, 140, 255, 0.25);
-    }
-
-    .venmo-icon {
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      width: 28px;
-      height: 28px;
-    }
-
-    .venmo-icon svg {
-      width: 100%;
-      height: 100%;
-      display: block;
-    }
-
-    .arrow {
-      font-size: 1.3rem;
-      line-height: 1;
-      transition: transform 0.2s ease;
-    }
-
-    .venmo-btn:hover .arrow {
-      transform: translateX(4px);
-    }
-
-    .footnote {
-      margin-top: 1.2rem;
       text-align: center;
-      font-size: 0.7rem;
-      color: #6d829e;
+      transition: all 0.2s;
+      border: 1px solid transparent;
+      margin-top: auto;
+    }
+
+    .tier-card .btn-tier:hover {
+      background: #f5b042;
+      color: #0c0b0e;
+      border-color: #f5b042;
+    }
+
+    .tier-card.featured {
+      border-color: #f5b042;
+      background: #1a1b1f;
+    }
+
+    .tier-card.featured .btn-tier {
+      background: #f5b042;
+      color: #0c0b0e;
+    }
+
+    /* ---------- QUOTE / HYPE ---------- */
+    .hype-quote {
+      background: linear-gradient(135deg, #1a1b1f, #0f1012);
+      border-radius: 32px;
+      padding: 60px 40px;
+      margin: 40px 0;
+      border: 1px solid #2a2c31;
+      text-align: center;
+    }
+
+    .hype-quote blockquote {
+      font-size: 1.6rem;
+      font-weight: 600;
+      line-height: 1.4;
+      max-width: 800px;
+      margin: 0 auto 20px;
+      color: #e8eaed;
+    }
+
+    .hype-quote blockquote i {
+      color: #f5b042;
+      margin: 0 8px;
+    }
+
+    .hype-quote cite {
+      font-style: normal;
+      color: #a8adb8;
+      font-weight: 400;
+    }
+
+    /* ---------- FOOTER ---------- */
+    footer {
+      padding: 40px 0 30px;
+      border-top: 1px solid rgba(255, 255, 255, 0.04);
       display: flex;
+      justify-content: space-between;
       align-items: center;
-      justify-content: center;
-      gap: 0.5rem;
       flex-wrap: wrap;
+      gap: 16px;
+      color: #6d727c;
+      font-size: 0.9rem;
     }
 
-    .footnote a {
-      color: #008cff;
-      text-decoration: none;
-      font-weight: 500;
+    footer .socials a {
+      margin-left: 18px;
+      font-size: 1.3rem;
+      color: #6d727c;
+      transition: color 0.2s;
     }
 
-    .footnote a:hover {
-      text-decoration: underline;
+    footer .socials a:hover {
+      color: #f5b042;
     }
 
-    .sdk-toggle {
-      margin-top: 1.8rem;
-      text-align: center;
-    }
-
-    .sdk-toggle summary {
-      font-size: 0.75rem;
-      color: #6d829e;
-      cursor: pointer;
-      padding: 0.4rem 1rem;
-      border-radius: 50px;
-      background: rgba(0, 0, 0, 0.02);
-      display: inline-block;
-      border: 1px dashed #cdd9e8;
-      font-weight: 500;
-    }
-
-    .sdk-toggle summary:hover {
-      background: rgba(0, 140, 255, 0.04);
-      border-color: #008cff;
-    }
-
-    .sdk-box {
-      margin-top: 1.2rem;
-      background: #0b1e33;
-      border-radius: 1.5rem;
-      padding: 1.5rem;
-      text-align: left;
-      color: #d4e2f5;
-      font-size: 0.8rem;
-      border: 1px solid #1a3a5c;
-    }
-
-    .sdk-box code {
-      display: block;
-      background: #142c44;
-      padding: 1rem;
-      border-radius: 1rem;
-      margin: 0.8rem 0;
-      color: #b8d0f0;
-      font-size: 0.7rem;
-      overflow-x: auto;
-      white-space: pre-wrap;
-      word-break: break-word;
-      border-left: 3px solid #008cff;
-    }
-
-    .sdk-box .note {
-      color: #8aa6c9;
-      margin-top: 0.5rem;
-      font-size: 0.7rem;
+    /* ---------- RESPONSIVE ---------- */
+    @media (max-width: 768px) {
+      .hero h1 {
+        font-size: 2.6rem;
+      }
+      .media-showcase {
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      }
+      .media-showcase img,
+      .media-showcase video {
+        height: 120px;
+      }
+      .nav-links {
+        gap: 16px;
+        font-size: 0.85rem;
+      }
+      .hype-quote blockquote {
+        font-size: 1.2rem;
+      }
     }
 
     @media (max-width: 480px) {
-      .payment-card {
-        padding: 1.5rem;
-        border-radius: 1.8rem;
+      .hero h1 {
+        font-size: 2rem;
       }
-      .qr-section {
-        flex-direction: column;
-        align-items: center;
-        padding: 1rem;
-      }
-      .qr-box {
-        width: 140px;
-        height: 140px;
-      }
-      .qr-actions {
-        width: 100%;
-        align-items: center;
-      }
-      .action-buttons {
-        justify-content: center;
-      }
-      .card-header h1 {
-        font-size: 1.2rem;
-      }
-      .venmo-btn {
+      .hero p {
         font-size: 1rem;
-        padding: 0.9rem 1.2rem;
+      }
+      .tier-grid {
+        grid-template-columns: 1fr;
+      }
+      .media-showcase {
+        grid-template-columns: 1fr 1fr;
       }
     }
 
-    .toast {
-      position: fixed;
-      bottom: 2rem;
-      left: 50%;
-      transform: translateX(-50%) translateY(100px);
-      background: #0b1e33;
-      color: #fff;
-      padding: 0.7rem 1.8rem;
-      border-radius: 50px;
-      font-size: 0.85rem;
-      font-weight: 500;
-      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.2);
-      opacity: 0;
-      transition: 0.3s ease;
-      pointer-events: none;
-      z-index: 999;
+    /* ---------- UTILITY ---------- */
+    .text-glow {
+      text-shadow: 0 0 40px rgba(217, 155, 60, 0.15);
     }
-    .toast.show {
-      opacity: 1;
-      transform: translateX(-50%) translateY(0);
-    }
+    .mt-2 { margin-top: 20px; }
+    .mb-2 { margin-bottom: 20px; }
   </style>
 </head>
 <body>
 
-  <div id="toast" class="toast">✅ Link copied to clipboard!</div>
+  <!-- Navigation -->
+  <nav class="container">
+    <div class="logo"><i class="fas fa-seedling"></i> Potato<span style="font-weight:400;color:#f5b042;background:none;-webkit-text-fill-color:initial;">Universe</span></div>
+    <div class="nav-links">
+      <a href="#features">Benefits</a>
+      <a href="#tiers">Tiers</a>
+      <a href="#gallery">Media</a>
+      <a href="#join" class="nav-cta">Join Now</a>
+    </div>
+  </nav>
 
-  <div class="payment-card">
-
-    <div class="card-header">
-      <i class="fab fa-venmo"></i>
-      <h1>Venmo Pay</h1>
-      <span class="badge"><i class="fas fa-lock" style="margin-right:4px;"></i> secure</span>
+  <!-- Hero -->
+  <section class="hero container">
+    <div class="hero-badge"><i class="fas fa-bolt"></i>  Exclusive · 18+ · Limited Access</div>
+    <h1>
+      Unlock the <br /><span class="highlight">Potato Universe</span>
+      <span class="floating-emojis">🚀</span>
+    </h1>
+    <p>
+      Where bettors win smarter, creators grow faster, and fans get closer than ever.
+      Step inside the most exclusive Discord ecosystem — prediction markets, private chats,
+      viral culture, and unfiltered community energy.
+    </p>
+    <div class="hero-actions">
+      <a href="#join" class="btn-primary"><i class="fas fa-rocket"></i>  Claim Your Tier</a>
+      <a href="#features" class="btn-secondary"><i class="fas fa-chevron-circle-down"></i>  Explore</a>
     </div>
 
-    <!-- Recipient -->
-    <div class="input-group">
-      <label><i class="fas fa-user" style="margin-right:6px;"></i> Recipient (Venmo @username)</label>
-      <div class="input-wrap">
-        <i class="fas fa-at"></i>
-        <input type="text" id="recipient" value="Viraldancando" readonly style="color:#6d829e; cursor:default;" />
-      </div>
+    <!-- Hero media gallery (tiny preview) -->
+    <div class="media-showcase" id="gallery">
+      <div class="media-item"><img src="https://media.discordapp.net/attachments/1486380561017868368/1523371548340256919/1cfa531d-e82b-4cf4-b6e7-ff084bd35bcf.webp?ex=6a531e0f&is=6a51cc8f&hm=a30a0932dc8cca1cfd31d70c3661d3bba6394acf985c05b708247f533c68f472&=&format=webp&width=983&height=655" alt="TV Guide" loading="lazy" /></div>
+      <div class="media-item"><video controls muted playsinline preload="metadata"><source src="https://images-ext-1.discordapp.net/external/2PVpRbpCGh4jq35x58zzQ5p138oaOOJcOXLbgy7a8Ko/https/media.tenor.com/eLKOWO46g5AAAAPo/climate-climate-change.mp4" type="video/mp4" /></video></div>
+      <div class="media-item"><img src="https://media.discordapp.net/attachments/1486380561017868368/1520019432972222615/43b43bed-582f-4e57-93d2-cd037890b8b6.png?ex=6a537269&is=6a5220e9&hm=3e3ab63300e4dbc5c44c9a8ac1fc58d4bb75518eb7d74c2507d4ee8dad7dadd9&=&format=webp&quality=lossless&width=420&height=280" alt="Potato" loading="lazy" /></div>
+      <div class="media-item"><img src="https://media.discordapp.net/attachments/1486380561017868368/1517762560273678536/DeviantArt_Logo.png?ex=6a532589&is=6a51d409&hm=6086ce941f977374de818e7266e5ca529b6a0447da302acac8f36d8c08f57f34&=&format=webp&quality=lossless&width=1600&height=642" alt="DeviantArt" loading="lazy" /></div>
     </div>
+  </section>
 
-    <!-- Amount with warning -->
-    <div class="input-group">
-      <label><i class="fas fa-dollar-sign" style="margin-right:6px;"></i> Amount (USD)</label>
-      <div class="input-wrap">
-        <i class="fas fa-dollar-sign"></i>
-        <input type="number" id="amount" value="6.99" step="0.01" min="0.01" />
-      </div>
-      <div id="donationWarning" class="warning-msg">
-        <i class="fas fa-exclamation-circle"></i> Anything above $6.99 is considered a donation.
-      </div>
-    </div>
-
-    <!-- Note -->
-    <div class="input-group">
-      <label><i class="fas fa-pencil-alt" style="margin-right:6px;"></i> Note</label>
-      <div class="input-wrap">
-        <i class="fas fa-comment"></i>
-        <input type="text" id="note" value="Coffee ☕" />
-      </div>
-    </div>
-
-    <!-- QR + actions -->
-    <div class="qr-section">
-      <div class="qr-box">
-        <img
-          src="https://64.media.tumblr.com/322b55b5f3ca67d647f4c38c2d7f0ed7/1a88d1b2e6d03560-02/s640x960/a72cba24cb5c4a0dd99fd51a8faab1284d536b9d.pnj"
-          alt="Venmo QR Code"
-        />
-      </div>
-      <div class="qr-actions">
-        <p><i class="fas fa-qrcode"></i> Scan with Venmo app</p>
-        <div class="action-buttons">
-          <button class="btn-sm" id="copyLinkBtn"><i class="fas fa-copy"></i> Copy link</button>
-          <button class="btn-sm primary-sm" id="shareBtn"><i class="fas fa-share-alt"></i> Share</button>
+  <!-- Features / Benefits -->
+  <section class="features" id="features">
+    <div class="container">
+      <h2 class="section-title text-glow">Why join the <span style="color:#f5b042;">Potato</span> ecosystem?</h2>
+      <p class="section-sub">More than a server — a membership club built for people who want more than emojis and roles.</p>
+      <div class="features-grid">
+        <div class="feature-card animate-on-scroll">
+          <i class="fas fa-chart-line"></i>
+          <h3>Betting Intel</h3>
+          <p>Prediction markets, sharp analysis, and insider tips from top bettors.</p>
+        </div>
+        <div class="feature-card animate-on-scroll">
+          <i class="fas fa-users"></i>
+          <h3>Influencer Access</h3>
+          <p>Private chats with creators, AMAs, and direct feedback loops.</p>
+        </div>
+        <div class="feature-card animate-on-scroll">
+          <i class="fas fa-crown"></i>
+          <h3>Exclusive Tiers</h3>
+          <p>Choose your level — from Patreon+ to DeviantArt, Upgrade.chat, and more.</p>
+        </div>
+        <div class="feature-card animate-on-scroll">
+          <i class="fas fa-video"></i>
+          <h3>Unfiltered Content</h3>
+          <p>Private videos, images, interviews, and a 18+ BlueSky group.</p>
         </div>
       </div>
     </div>
+  </section>
 
-    <!-- Venmo button -->
-    <div class="payment-box">
-      <button class="venmo-btn" id="payBtn">
-        <span class="venmo-icon">
-          <svg viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="16" cy="16" r="14" stroke="white" stroke-width="1.5" opacity="0.6"/>
-            <path d="M10 10L15 22L20 10H23L18 22L13 10H10Z" fill="white"/>
-          </svg>
-        </span>
-        Pay with Venmo
-        <span class="arrow">→</span>
-      </button>
-    </div>
+  <!-- Subscription Tiers -->
+  <section class="tiers" id="tiers">
+    <div class="container">
+      <h2 class="section-title text-glow">Choose your <span style="color:#f5b042;">access</span></h2>
+      <p class="section-sub">Your experience determines your world — pick the tier that fits your vibe.</p>
+      <div class="tier-grid">
+        <!-- Tier 1: Patreon+ -->
+        <div class="tier-card featured">
+          <span class="tier-badge">POPULAR</span>
+          <div class="tier-icon">🥔</div>
+          <h3>Patreon+</h3>
+          <div class="tier-price">Free gift · then $5/mo</div>
+          <ul>
+            <li><i class="fas fa-check-circle"></i> Free lesson plans & digital items</li>
+            <li><i class="fas fa-check-circle"></i> Private Discord server</li>
+            <li><i class="fas fa-check-circle"></i> Early access to bundles</li>
+            <li><i class="fas fa-check-circle"></i> 18+ content vault</li>
+          </ul>
+          <a href="http://patreon.com/Viraldancandofunk/gift" target="_blank" class="btn-tier">Claim Gift <i class="fas fa-arrow-right"></i></a>
+        </div>
 
-    <div class="footnote">
-      <span><i class="fas fa-external-link-alt"></i> Opens your Venmo profile</span>
-      <span>·</span>
-      <span><i class="fas fa-shield-alt"></i> No payment processed on this page</span>
-    </div>
+        <!-- Tier 2: Upgrade.chat -->
+        <div class="tier-card">
+          <div class="tier-icon">⚡</div>
+          <h3>Upgrade.chat</h3>
+          <div class="tier-price">PayPal / Stripe</div>
+          <ul>
+            <li><i class="fas fa-check-circle"></i> Unlock all servers & channels</li>
+            <li><i class="fas fa-check-circle"></i> Automated business tools</li>
+            <li><i class="fas fa-check-circle"></i> Referrals & coupons</li>
+            <li><i class="fas fa-check-circle"></i> Verified partner bot</li>
+          </ul>
+          <a href="https://upgrade.chat/1400235929154879490" target="_blank" class="btn-tier">Subscribe <i class="fas fa-arrow-right"></i></a>
+        </div>
 
-    <!-- Developer SDK -->
-    <details class="sdk-toggle">
-      <summary><i class="fas fa-code"></i> Developer: Official SDK button</summary>
-      <div class="sdk-box">
-        <strong style="color:#fff;">🔹 PayPal JS SDK (Venmo button)</strong>
-        <p style="margin:0.5rem 0 0.3rem;color:#b8d0f0;">Replace <code style="background:#0b1e33;padding:0.1rem 0.4rem;">YOUR_CLIENT_ID</code> with your PayPal client ID.</p>
-        <code>
-          &lt;script src="https://www.paypal.com/sdk/js?client-id=YOUR_CLIENT_ID&components=buttons,venmo-payments"&gt;&lt;/script&gt;
-          &lt;div id="venmo-button-container"&gt;&lt;/div&gt;
-          &lt;script&gt;
-            paypal.Buttons({
-              style: { shape: 'rect', color: 'blue' },
-              createOrder: function(data, actions) {
-                return actions.order.create({ purchase_units: [{ amount: { value: '10.00' } }] });
-              },
-              onApprove: function(data, actions) {
-                return actions.order.capture();
-              }
-            }).render('#venmo-button-container');
-          &lt;/script&gt;
-        </code>
-        <div class="note">
-          <i class="fas fa-info-circle"></i> The SDK will show the Venmo button to eligible US users.
-          <a href="https://developer.paypal.com/docs/checkout/venmo/" target="_blank" style="color:#66b3ff;display:inline-block;margin-top:0.3rem;">
-            Read full docs →
-          </a>
+        <!-- Tier 3: DeviantArt -->
+        <div class="tier-card">
+          <div class="tier-icon">🎨</div>
+          <h3>DeviantArt Tier</h3>
+          <div class="tier-price">18+ only</div>
+          <ul>
+            <li><i class="fas fa-check-circle"></i> Private videos & images</li>
+            <li><i class="fas fa-check-circle"></i> Exclusive interviews</li>
+            <li><i class="fas fa-check-circle"></i> First subscriber milestone</li>
+            <li><i class="fas fa-check-circle"></i> Direct creator access</li>
+          </ul>
+          <a href="https://www.deviantart.com/patreonnsfw/tier/Private-Videos-Images-and-interviews-1330367532" target="_blank" class="btn-tier">Join <i class="fas fa-arrow-right"></i></a>
+        </div>
+
+        <!-- Tier 4: BlueSky Group -->
+        <div class="tier-card">
+          <div class="tier-icon">🦋</div>
+          <h3>BlueSky Group</h3>
+          <div class="tier-price">Coming July 2026</div>
+          <ul>
+            <li><i class="fas fa-check-circle"></i> Followers & devs only</li>
+            <li><i class="fas fa-check-circle"></i> 18+ content hub</li>
+            <li><i class="fas fa-check-circle"></i> AI prompts & bundles</li>
+            <li><i class="fas fa-check-circle"></i> 100% rights-owned media</li>
+          </ul>
+          <a href="https://bsky.app/profile/patreonbyviral.bsky.social" target="_blank" class="btn-tier">Follow <i class="fas fa-arrow-right"></i></a>
         </div>
       </div>
-    </details>
-  </div>
+    </div>
+  </section>
 
+  <!-- Hype Quote & CTA -->
+  <section class="container" id="join">
+    <div class="hype-quote">
+      <blockquote>
+        <i class="fas fa-quote-left"></i> 
+        This isn’t a server… it’s a membership club — built for people who want more than emojis and roles.
+        <i class="fas fa-quote-right"></i>
+      </blockquote>
+      <cite>— Monkey D [H!], Potato Universe</cite>
+      <div style="margin-top: 30px; display: flex; flex-wrap: wrap; justify-content: center; gap: 16px;">
+        <a href="https://theworldtrade.gumroad.com/l/okaev?wanted=true" target="_blank" class="btn-primary"><i class="fas fa-shopping-cart"></i> Gumroad · Potato Universe</a>
+        <a href="https://www.paypal.com/ncp/payment/F7URX7N6WV85C" target="_blank" class="btn-secondary"><i class="fab fa-paypal"></i> PayPal · TV Club</a>
+        <a href="https://discord.gg/8F7ZbmV6Mh" target="_blank" class="btn-secondary"><i class="fab fa-discord"></i> Join Discord</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="container">
+    <span>© 2026 Potato Universe · All rights reserved.</span>
+    <div class="socials">
+      <a href="https://bsky.app/profile/patreonbyviral.bsky.social" target="_blank"><i class="fab fa-bluesky"></i></a>
+      <a href="https://www.deviantart.com/patreonnsfw" target="_blank"><i class="fab fa-deviantart"></i></a>
+      <a href="https://discord.gg/8F7ZbmV6Mh" target="_blank"><i class="fab fa-discord"></i></a>
+      <a href="https://tatotalk.github.io/shop" target="_blank"><i class="fas fa-store"></i></a>
+    </div>
+  </footer>
+
+  <!-- Simple scroll animation -->
   <script>
-    (function() {
-      'use strict';
-
-      const amountInput = document.getElementById('amount');
-      const payBtn = document.getElementById('payBtn');
-      const copyBtn = document.getElementById('copyLinkBtn');
-      const shareBtn = document.getElementById('shareBtn');
-      const toast = document.getElementById('toast');
-      const warningEl = document.getElementById('donationWarning');
-
-      // ---- Amount warning ----
-      function checkAmount() {
-        const val = parseFloat(amountInput.value);
-        if (!isNaN(val) && val > 6.99) {
-          warningEl.classList.add('show');
-        } else {
-          warningEl.classList.remove('show');
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.style.opacity = '1';
         }
-      }
-
-      amountInput.addEventListener('input', checkAmount);
-      checkAmount();
-
-      // ---- Venmo profile URL ----
-      const PROFILE_URL = 'https://account.venmo.com/u/Viraldancando';
-
-      function openProfile() {
-        window.open(PROFILE_URL, '_blank');
-      }
-
-      // ---- Copy / Share ----
-      function copyLink() {
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(PROFILE_URL).then(() => {
-            showToast('✅ Profile link copied!');
-          }).catch(() => {
-            fallbackCopy(PROFILE_URL);
-          });
-        } else {
-          fallbackCopy(PROFILE_URL);
-        }
-      }
-
-      function fallbackCopy(text) {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.cssText = 'position:fixed;opacity:0;left:-9999px;';
-        document.body.appendChild(ta);
-        ta.select();
-        try {
-          document.execCommand('copy');
-          showToast('✅ Profile link copied!');
-        } catch (e) {
-          showToast('❌ Could not copy.');
-        }
-        document.body.removeChild(ta);
-      }
-
-      function shareLink() {
-        if (navigator.share) {
-          navigator.share({
-            title: 'Venmo Payment',
-            text: `Pay via Venmo: ${PROFILE_URL}`,
-            url: PROFILE_URL,
-          }).catch(() => {});
-        } else {
-          copyLink();
-        }
-      }
-
-      let toastTimeout;
-
-      function showToast(msg) {
-        toast.textContent = msg;
-        toast.classList.add('show');
-        clearTimeout(toastTimeout);
-        toastTimeout = setTimeout(() => toast.classList.remove('show'), 3000);
-      }
-
-      // ---- Events ----
-      payBtn.addEventListener('click', openProfile);
-      copyBtn.addEventListener('click', copyLink);
-      shareBtn.addEventListener('click', shareLink);
-
-      document.querySelectorAll('input').forEach(inp => {
-        inp.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter') {
-            e.preventDefault();
-            payBtn.click();
-          }
-        });
       });
+    }, { threshold: 0.2 });
 
-      console.log('✅ Venmo card ready with smooth opening effect.');
-    })();
+    document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+
+    // Smooth gallery video pause on scroll out (optional)
+    document.querySelectorAll('.media-showcase video').forEach(vid => {
+      vid.addEventListener('mouseenter', () => vid.play());
+      vid.addEventListener('mouseleave', () => vid.pause());
+    });
   </script>
-
 </body>
 </html>
